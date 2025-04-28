@@ -1,12 +1,11 @@
-import Link from 'next/link'
-import React from 'react'
-import { FileText } from 'lucide-react'
-import { Button } from '../ui/button'
-import NavLink from './nav-link'
+import Link from 'next/link';
+import React from 'react';
+import { FileText } from 'lucide-react';
+import { Button } from '../ui/button';
+import NavLink from './nav-link';
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 const Header = () => {
-  const isLoggedIn = false // Replace with actual authentication logic
-
   return (
     <nav className="container flex items-center justify-between py-4 lg:px-8 px-2 mx-auto">
       {/* Left: Logo */}
@@ -27,33 +26,31 @@ const Header = () => {
         <NavLink href="/#pricing" className="text-gray-800 hover:text-black transition">
           Pricing
         </NavLink>
-        {isLoggedIn && (
+        <SignedIn>
           <NavLink href="/dashboard" className="text-gray-800 hover:text-black transition">
-            Your Samaries
+            Your Summaries
           </NavLink>
-        )}
+        </SignedIn>
       </div>
 
       {/* Right: Auth Controls */}
-      <div className="flex lg:justify-end lg:flex-1">
-        {isLoggedIn ? (
-          <div className="flex gap-2 items-center">
-            <Link href="/upload" className="text-gray-800 hover:text-black transition" aria-label="Upload a PDF">
-              Upload a PDF
-            </Link>
-            <div className="text-sm font-semibold text-gray-600">Pro</div>
-            <Button variant="default">User</Button>
-          </div>
-        ) : (
-          <div>
-            <Link href="/sign-in" className="text-gray-800 hover:text-black transition" aria-label="Sign In">
-              Sign In
-            </Link>
-          </div>
-        )}
+      <div className="flex lg:justify-end lg:flex-1 gap-4 items-center">
+        <SignedIn>
+          <Link href="/upload" className="text-gray-800 hover:text-black transition" aria-label="Upload a PDF">
+            Upload a PDF
+          </Link>
+          <div className="text-sm font-semibold text-gray-600">Pro</div>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
+
+        <SignedOut>
+          <Link href="/sign-in" className="text-gray-800 hover:text-black transition" aria-label="Sign In">
+            Sign In
+          </Link>
+        </SignedOut>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
