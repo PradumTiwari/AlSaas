@@ -2,11 +2,26 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import BgGradient from '../common/bg-gradient';
-import Uploadforminput from './upload-form-input';
+
 import UploadFormInput from './upload-form-input';
+import { useUploadThing } from '@/utils/uploadthing';
 
 const UploadForm = () => {
-  const handleSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
+
+  const {startUpload,routeConfig}=useUploadThing('pdfUploader',{
+    onClientUploadComplete:()=>{
+      alert("Upload complete");
+    },
+    onUploadError:(error)=>{
+      alert(`Error uploading file: ${error.message}`);
+    },
+    onUploadBegin:(file)=>{
+      console.log("Upload has Began for file",file);
+      
+    }
+  })
+
+  const handleSubmit=async(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     console.log("Sumitted");
     const formData=new FormData(e.currentTarget);
@@ -30,6 +45,10 @@ const UploadForm = () => {
     //summaris the pdf using openAi or gemmini
     //store the summary in the database
     //display the summary to the user
+    const resp=await startUpload([file]);
+    if(!resp){
+      return ;
+    }
     
   }
   return (
