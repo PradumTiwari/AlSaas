@@ -16,18 +16,18 @@ export const ourFileRouter = {
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log('✅ Upload completed');
-      console.log('User ID:', metadata.userId);
-      console.log('File URL:', file.url);
-    
-      // Only return JSON-serializable values
-      return {
-        userId: metadata.userId,
-        file: file.url,
-        fileName: file.name,
-      };
-    })
-    
+  console.log('✅ Upload completed');
+  console.log('User ID:', metadata.userId);
+  console.log('File URL:', file.url);
+
+  // Only return JSON-serializable values
+  return {
+    userId: metadata.userId,
+    file: file.url,
+    fileName: file.name,
+  };
+})
+
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
