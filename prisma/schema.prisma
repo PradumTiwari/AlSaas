@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+ 
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Status {
+  PENDING
+  ACTIVE
+  NOT_ACTIVE
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  full_name    String?
+  customer_id  String?
+  price_id     Int?
+  status       Status?        // ← uses the enum here
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  summaries    PdfSummary[]   @relation("UserSummaries")
+  payments     Payment[]      @relation("UserPayments")
+}
+
+model PdfSummary {
+  id               String    @id @default(cuid())
+  user_id          String
+  user             User?    @relation("UserSummaries", fields: [user_id], references: [id])
+  original_file_url String?
+  summary_text     String?
+  status           Status?   // ← uses the enum here
+  title            String?
+  file_name        String?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+}
+
+model Payment {
+  id               String    @id @default(cuid())
+  amount           Float
+  status           Status?   // ← uses the enum here
+  stripe_payment_id String?
+  price_id         String?
+  user_email       String
+  user             User?     @relation("UserPayments", fields: [user_email], references: [email])
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+}

@@ -5,7 +5,8 @@ import BgGradient from '../common/bg-gradient';
 
 import UploadFormInput from './upload-form-input';
 import { useUploadThing } from '@/utils/uploadthing';
-import { generatePdfSummary } from '@/actions/upload-action';
+import { generatePdfSummary, storePdfSummary } from '@/actions/upload-action';
+
 
 const UploadForm = () => {
   const [summary,setSummary]=useState("");
@@ -56,7 +57,11 @@ const UploadForm = () => {
       return;
     }
 
+    console.log("Upload Response is ",uploadResponse[0]);
+    
+
     const fileUrl=uploadResponse[0].ufsUrl;
+    const name=uploadResponse[0].name;
     console.log("File URL",fileUrl);
     const summary=await generatePdfSummary(uploadResponse);
     console.log("Summary Of data is",summary);
@@ -70,7 +75,7 @@ const UploadForm = () => {
       },
       body:JSON.stringify({
        
-        text:summary.data
+        text:summary.data?.pdfText
       })
    
     })
@@ -81,8 +86,20 @@ const UploadForm = () => {
   console.log("Summary from backend: Pradumaaa", result);
 
     const data=result
+    
+
+    if(data){
+  await storePdfSummary({
+  fileUrl,
+  summary:result, // or summary.data.pdfText if you meant that
+  title: "Title",
+  fileName: name
+});
+
+    // }
    setSummary(data);
   }
+}
   return (
   <>
     {!summary ? (

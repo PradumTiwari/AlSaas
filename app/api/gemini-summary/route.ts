@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
     }
 
     const summary = await generateSummaryFromGemini(text);
+    
     console.log("Summary in Backend Route Pradum is ",typeof summary);
     
     return new NextResponse(summary,{

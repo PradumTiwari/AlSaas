@@ -2,6 +2,12 @@
 'use server';
 
 import { fetchAndExtractPdfText } from "@/lib/langchain"; // Adjust path if necessary
+import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+
+
+
+
 
 export async function generatePdfSummary(uploadResponse: {
   name: string;
@@ -38,7 +44,10 @@ export async function generatePdfSummary(uploadResponse: {
     return {
       success: true,
       message: "PDF extracted successfully",
-      data: pdfText,
+      data: {
+        title:fileName,
+        pdfText
+      },
     };
   } catch (error) {
     console.error("Error extracting PDF:", error);
@@ -46,6 +55,98 @@ export async function generatePdfSummary(uploadResponse: {
       success: false,
       message: "Error generating summary",
       data: null,
+    };
+  }
+}
+
+
+
+export async function savePdfSummary({
+  userId,
+  fileUrl,
+  summary,
+  title,
+  fileName,
+}:{
+  userId:string;fileUrl:string;title:string;summary:string;fileName:string
+}){
+  try {
+    const res=await prisma.pdfSummary.create({
+      data:{
+        user_id:userId,
+        original_file_url:fileUrl,
+        status:"NOT_ACTIVE",
+        summary_text:summary,
+        title:title,
+        file_name:fileName,
+        updated_at:new Date(),
+      }
+    })
+    console.log("Respinse on saving",res);
+    
+    return res;
+    
+  } catch (error) {
+    console.log("Error Saving pdf Summary");
+    console.log("Error");
+    
+    throw error;
+    
+  }
+}
+
+export async function storePdfSummary({ 
+      fileUrl,
+      summary,
+      title,
+      fileName}:{
+        fileUrl:string;title:string;summary:string;fileName:string
+      }){
+  try {
+    
+    const {userId}=await auth();
+    if(!userId){
+      return {
+        success:false,
+        message:"user not found"
+      }
+    }
+
+      let user = await prisma.user.findUnique({ where: { id: userId } });
+    
+       if (!user) {
+      // Optionally fetch more data about the user from Clerk API if needed
+      user = await prisma.user.create({
+        data: {
+          id: userId,
+          email: `${userId}@placeholder.com`, // Replace with actual email if available
+        },
+      });
+    }
+   const pdfSummary=await savePdfSummary({
+      userId,
+      fileUrl,
+      summary,
+      title,
+      fileName
+    })
+
+    if(pdfSummary){
+      return {
+        success:true,
+        message:'Pdf Summary Saved Sucessfully'
+      }
+    }
+     return {
+      success: false,
+      message: "Failed to save PDF summary",
+    };
+
+  }  catch (error) {
+    console.error("Error in storePdfSummary:", error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Error Saving PDF Summary",
     };
   }
 }

@@ -15,7 +15,7 @@ export async function fetchAndExtractPdfText(pdfUrl: string) {
 
     const tempFilePath = path.join(os.tmpdir(), `${uuidv4()}.pdf`);
     await fs.writeFile(tempFilePath, buffer);
-
+    
     const loader = new PDFLoader(tempFilePath);
     const docs = await loader.load();
    console.log("Loaded documents:", docs);
