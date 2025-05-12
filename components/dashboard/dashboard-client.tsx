@@ -13,7 +13,7 @@ interface Summary {
   id: string;
   title: string | null;  // Allow title to be nullable
   summary_text: string | null;
-  original_file_url: string;
+  original_file_url: string|null;
   status: string | null;
   created_at: Date;
   updated_at: Date;

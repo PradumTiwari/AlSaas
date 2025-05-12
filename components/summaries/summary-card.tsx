@@ -9,7 +9,7 @@ interface SummaryCardProps {
     id: string;
     title: string | null; // Allow title to be either string or null
     summary_text: string | null;
-    original_file_url: string;
+    original_file_url: string|null;
   };
   onDelete: (id: string) => void;
 }
@@ -25,7 +25,7 @@ const SummaryCard = ({ summaryCard, onDelete }: SummaryCardProps) => {
         <div className="flex flex-col gap-2">
           <h2 className="text-lg font-semibold text-gray-900">{summaryCard.title}</h2>
           <a
-            href={summaryCard.original_file_url}
+            href={summaryCard.original_file_url||""}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-light text-blue-600 hover:text-blue-800"
