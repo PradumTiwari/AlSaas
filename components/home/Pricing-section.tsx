@@ -69,7 +69,7 @@ const PricingCard = ({ name, price, description, items, id, paymentLink }: Price
 
 export default function PricingSection() {
   return (
-    <section>
+    <section id="pricing">
       <div className="py-12 lg:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 lg:pt-12">
         <div className="mb-12 text-center">
           <h2 className="text-4xl font-bold">Pricing</h2>

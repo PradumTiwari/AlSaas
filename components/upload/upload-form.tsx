@@ -7,13 +7,14 @@ import UploadFormInput from './upload-form-input';
 import { useUploadThing } from '@/utils/uploadthing';
 import { generatePdfSummary, storePdfSummary } from '@/actions/upload-action';
 
-
+import { mutate } from 'swr';
 const UploadForm = () => {
   const [summary,setSummary]=useState("");
 
   const {startUpload,routeConfig}=useUploadThing('pdfUploader',{
     onClientUploadComplete:()=>{
       alert("Upload complete");
+      // mutate('/api/summaries');
     },
     onUploadError:(error)=>{
       alert(`Error uploading file: ${error.message}`);
@@ -89,15 +90,19 @@ const UploadForm = () => {
     
 
     if(data){
-  await storePdfSummary({
+  const savedSummary = await storePdfSummary({
   fileUrl,
-  summary:result, // or summary.data.pdfText if you meant that
+  summary: result,
   title: "Title",
   fileName: name
 });
 
-    // }
-   setSummary(data);
+setSummary(data);
+
+mutate('/api/summaries', (currentSummaries = []) => {
+  return [savedSummary, ...currentSummaries];
+}, false);  
+
   }
 }
   return (
