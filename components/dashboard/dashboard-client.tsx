@@ -23,7 +23,7 @@ export default function DashboardClient({ summaries: initialSummaries }: { summa
   // Use SWR hook to manage fetching data
  const { data: summaries, error, mutate } = useSWR('/api/summaries', fetcher, {
   fallbackData: initialSummaries,
-  refreshInterval: 1000,       // 🔁 Poll the endpoint every 5 seconds
+  refreshInterval: 5000,       // 🔁 Poll the endpoint every 5 seconds
   revalidateOnFocus: true,     // 🔁 Revalidate when tab is refocused
 });
   if (error) return <div>Error loading summaries...</div>;

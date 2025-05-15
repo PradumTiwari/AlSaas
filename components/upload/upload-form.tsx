@@ -110,11 +110,12 @@ mutate('/api/summaries', (currentSummaries = []) => {
     {!summary ? (
       <UploadFormInput onSubmit={handleSubmit} />
     ) : (
-      <div className="mt-4 p-4 bg-gray-100 rounded">
-        <h2 className="text-lg font-semibold">Summary:</h2>
-        <p>{summary}</p>
-        <Button onClick={() => setSummary("")} className="mt-4">Upload Another</Button>
-      </div>
+      <div className="mt-4 p-4 rounded bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors">
+  <h2 className="text-lg font-semibold">Summary:</h2>
+  <p>{summary}</p>
+  <Button onClick={() => setSummary("")} className="mt-4">Upload Another</Button>
+</div>
+
     )}
   </>
 );
