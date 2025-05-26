@@ -10,7 +10,7 @@ type PriceType = {
   priceId: string;
 };
 
-const plans: PriceType[] = [
+export const plans: PriceType[] = [
   {
     name: 'Basic',
     price: 9,
@@ -21,8 +21,8 @@ const plans: PriceType[] = [
       'Email support',
     ],
     id: 'basic',
-    paymentLink: '#',
-    priceId: '',
+    paymentLink: process.env.NODE_ENV==='development'?'https://buy.stripe.com/test_dRmfZjgkGbzQ5sP76z2Fa01':'',
+     priceId: process.env.NODE_ENV==='development'?'price_1ROEhlPx2d38AezSyLRBGlaJ':'',
   },
   {
     name: 'Pro',
@@ -34,8 +34,8 @@ const plans: PriceType[] = [
       '24/7 priority support',
     ],
     id: 'pro',
-    paymentLink: '#',
-    priceId: '',
+    paymentLink: process.env.NODE_ENV==='development'?'https://buy.stripe.com/test_7sYdRbc4qgUa08v9eH2Fa00':'',
+    priceId: process.env.NODE_ENV==='development'?'price_1ROEhlPx2d38AezS6ODsEPrb':'',
   },
 ];
 

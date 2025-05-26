@@ -26,7 +26,7 @@ model User {
   email        String         @unique
   full_name    String?
   customer_id  String?
-  price_id     Int?
+  price_id    String?
   status       Status?        // ← uses the enum here
   created_at   DateTime       @default(now())
   updated_at   DateTime       @updatedAt

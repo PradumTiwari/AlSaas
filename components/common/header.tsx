@@ -4,6 +4,8 @@ import { FileText } from "lucide-react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { ModeToggle } from "../mode-toggle";
 import NavLink from "./nav-link";
+import PlaneBadge from "./PlaneBadge";
+
 
 const Header = () => {
   return (
@@ -17,7 +19,7 @@ const Header = () => {
               aria-label="Sommaire Logo"
             />
             <span className="font-extrabold lg:text-xl text-gray-900 dark:text-white">
-              Sommaire
+              PSum
             </span>
           </div>
         </NavLink>
@@ -53,7 +55,7 @@ const Header = () => {
             Upload a PDF
           </Link>
           <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-            Pro
+          <PlaneBadge/>
           </div>
           <UserButton afterSignOutUrl="/" />
         </SignedIn>
